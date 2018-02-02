@@ -1,0 +1,68 @@
+assets.png
+size: 32, 70
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+goomba/dead
+  rotate: false
+  xy: 13, 62
+  size: 16, 8
+  orig: 16, 8
+  offset: 0, 0
+  index: -1
+goomba/walk
+  rotate: false
+  xy: 16, 30
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+goomba/walk
+  rotate: false
+  xy: 0, 33
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+mario/damp
+  rotate: false
+  xy: 0, 49
+  size: 13, 15
+  orig: 13, 15
+  offset: 0, 0
+  index: -1
+mario/dead
+  rotate: false
+  xy: 17, 0
+  size: 15, 14
+  orig: 15, 14
+  offset: 0, 0
+  index: -1
+mario/idle
+  rotate: false
+  xy: 17, 14
+  size: 13, 16
+  orig: 13, 16
+  offset: 0, 0
+  index: -1
+mario/jump
+  rotate: false
+  xy: 0, 0
+  size: 17, 16
+  orig: 17, 16
+  offset: 0, 0
+  index: -1
+mario/walk
+  rotate: false
+  xy: 16, 46
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+mario/walk
+  rotate: false
+  xy: 0, 16
+  size: 16, 17
+  orig: 16, 17
+  offset: 0, 0
+  index: 2
