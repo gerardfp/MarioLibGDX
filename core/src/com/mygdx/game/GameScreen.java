@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,11 +13,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  */
 
 public class GameScreen extends MyGdxGameScreen {
+    public static float PPM = 1/16f;
+    public static int SCENE_WIDTH = 32;
+    public static int SCENE_HEIGHT = 16;
 
     World world;
 
     FitViewport viewport;
     OrthographicCamera camera;
+    float timer;
 
     GameScreen(Game game){
         super(game);
@@ -24,16 +29,26 @@ public class GameScreen extends MyGdxGameScreen {
 
     @Override
     public void show() {
+
+        if (! Gdx.app.getType().equals(Application.ApplicationType.Android)) {
+            Gdx.graphics.setWindowedMode(1024,512);
+        }
+
         camera = new OrthographicCamera();
-        viewport = new FitViewport(512, 256, camera);
+        viewport = new FitViewport(SCENE_WIDTH, SCENE_HEIGHT, camera);
         viewport.apply();
 
-        camera.position.set(256, 128, 0);
+        camera.position.set(SCENE_WIDTH/2, SCENE_HEIGHT/2, 0);
         world = new World(camera);
     }
 
     @Override
     public void render(float delta) {
+        timer += delta;
+
+        if(timer < 0.5f) return;
+        timer = 0;
+
         Gdx.gl.glClearColor(0.23f,0.73f,0.98f,0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
