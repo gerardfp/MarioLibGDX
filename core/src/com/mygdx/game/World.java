@@ -1,15 +1,11 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-
-import sun.java2d.ReentrantContextProviderTL;
 
 /**
  * Created by gerard on 02/02/18.
@@ -26,6 +22,7 @@ public class World {
 
     private Pool<Rectangle> rectPool;
     private Array<Rectangle> tiles = new Array<Rectangle>();
+    private Array<Rectangle> nearestTiles = new Array<Rectangle>();
 
     World(OrthographicCamera camera) {
         this.camera = camera;
@@ -42,12 +39,10 @@ public class World {
     }
 
     void render(float delta) {
-
-
-        updateMario(delta);
-
         map.render();
         mario.render();
+
+        updateMario(delta);
 
         camera.position.x = MathUtils.clamp(mario.position.x, camera.viewportWidth / 2f,  map.getWidth() - camera.viewportWidth / 2f);
         camera.position.y = MathUtils.clamp(mario.position.y, camera.viewportHeight / 2f,  map.getHeight() - camera.viewportHeight / 2f);
@@ -57,8 +52,9 @@ public class World {
     void updateMario(float delta) {
         mario.stateTime += delta;
 
-        if(!mario.grounded)
+        if(mario.velocity.x > 0 && mario.grounded) {
             mario.setState(Mario.State.Damping);
+        }
 
         if (Controls.isRightPressed()) {
             mario.velocity.x = mario.maxVelocity.x;
@@ -81,131 +77,98 @@ public class World {
         }
 
         mario.velocity.x *= Mario.DAMPING;
-        //mario.velocity.y += GRAVITY;
+        mario.velocity.y += GRAVITY;
 
         collide(delta);
 
         mario.position.x += mario.velocity.x * delta;
         mario.position.y += mario.velocity.y * delta;
 
+        if(mario.velocity.x < 0.1f) {
+            mario.velocity.x = 0;
+        }
         if(mario.position.y < 0){
             mario.position.y = 0;
             mario.grounded = true;
         }
     }
 
-    void collide(float delta) {
-        Vector2 start = new Vector2();
-        Vector2 end = new Vector2();
+    void collide(float delta){
+        Rectangle startPosition = new Rectangle(mario.position.x, mario.position.y, mario.width, mario.height);
+        Rectangle endPosition = new Rectangle(mario.position.x+mario.velocity.x*delta, mario.position.y+mario.velocity.y*delta, mario.width, mario.height);
 
+        map.getTiles(endPosition, tiles, rectPool);
 
-        start.x = mario.position.x;
-        start.y = mario.position.y;
-
-        end.x = mario.position.x + mario.velocity.x*delta;
-        end.y = mario.position.y + mario.velocity.y*delta;
-
-        Rectangle rectangle = map.getTile(start, end, mario.width, mario.height);
-
-        System.out.println("RECTANGLE = " + rectangle);
-        System.out.println("ENDDD = " + end.x + "," +end.y);
-
-        if(rectangle != null) {
-            if (rectangle.x > end.x) {
-                mario.position.x = rectangle.x - mario.width;
-            } else if (rectangle.x < end.x){
-                mario.position.x = rectangle.x + rectangle.width;
-            }
-
-            if (rectangle.y >= end.y) {
-                mario.position.y = rectangle.y + rectangle.height;
-            } else if (rectangle.y < end.y){
-                mario.position.y = rectangle.y - mario.height;
-            }
-
-        }
-    }
-
-    void collide2(float delta){
-        int startX, startY, endX, endY;
-
-        if (mario.direction == Mario.Direction.Right) {
-            startX = (int)(mario.position.x + mario.width);
-            endX = (int)(mario.position.x + mario.width + mario.velocity.x*delta);
-        } else {
-            startX = (int)(mario.position.x + mario.velocity.x*delta);
-            endX = (int)(mario.position.x);
-        }
-
-        startY = (int)(mario.position.y);
-        endY = (int)(mario.position.y + mario.height);
-
-        map.getTiles(startX, startY, endX, endY, tiles, rectPool);
-        Rectangle firstLeft=null, firstRight=null;
-        for(Rectangle tile: tiles) {
-            System.out.println("TILEEE " + tile);
-            if(mario.direction == Mario.Direction.Right) {
-                if (firstRight == null) {
-                    firstRight = tile;
-                }  else if (tile.x < firstRight.x) {
-                    firstRight = tile;
-                }
+        Rectangle nearestTile = null;
+        float nearestTileDst=0, tileDst;
+        Vector2 tileCenter = new Vector2();
+        Vector2 startCenter = new Vector2();
+        startPosition.getCenter(startCenter);
+        for (Rectangle tile: tiles) {
+            if (nearestTile == null) {
+                nearestTile = tile;
+                nearestTileDst = tile.getCenter(tileCenter).dst2(startCenter);
             } else {
-                if(firstLeft == null) {
-                    firstLeft = tile;
-                } else if(tile.x > firstLeft.x) {
-                    firstLeft = tile;
+                tileDst = tile.getCenter(tileCenter).dst2(startCenter);
+                if(tileDst < nearestTileDst) {
+                    nearestTileDst = tileDst;
                 }
             }
         }
 
-        if(firstRight != null) {
-            mario.velocity.x = 0;
-            mario.position.x = firstRight.x - mario.width;
-            System.out.println(" new post " + mario.position.x + " --> " + firstRight + "  - " +mario.width);
-        } else if(firstLeft != null) {
-            mario.velocity.x = 0;
-            mario.position.x = firstLeft.x + firstLeft.width;
-        }
-
-        System.out.println("FIRSTRIGHT " + firstRight);
-
-        if (mario.velocity.y > 0) {
-            startY = (int)(mario.position.y + mario.height + mario.velocity.y*delta);
-            endY = (int)(mario.position.y + mario.height);
-        } else {
-            startY = (int)(mario.position.y + mario.velocity.y*delta);
-            endY = (int)(mario.position.y);
-        }
-
-        startX = (int)(mario.position.x);
-        endX = (int)(mario.position.x + mario.width);
-
-        map.getTiles(startX, startY, endX, endY, tiles, rectPool);
-        Rectangle firstDown=null, firstUp=null;
-        for(Rectangle tile: tiles) {
-            if(mario.velocity.y > 0) {
-                if(firstUp == null) {
-                    firstUp = tile;
-                } else if(tile.y < firstUp.y) {
-                    firstUp = tile;
-                }
-            } else if (mario.velocity.y < 0){
-                if(firstDown == null) {
-                    firstDown = tile;
-                } else if(tile.y > firstDown.y) {
-                    firstDown = tile;
-                }
+        nearestTiles.clear();
+        for (Rectangle tile: tiles) {
+            tileDst = tile.getCenter(tileCenter).dst2(startCenter);
+            if(tileDst - nearestTileDst < 0.4f) {
+                nearestTiles.add(tile);
             }
         }
 
-        if(firstUp != null) {
-            mario.velocity.y = 0;
-            mario.position.y = firstUp.y - mario.height;
-        } else if(firstDown != null) {
-            mario.velocity.y = 0;
-            mario.position.y = firstDown.y + firstDown.height;
-            mario.grounded = true;
+        for (Rectangle tile: nearestTiles) {
+            int collision = 0; // 0=left 1=right 2=bottom 3=up
+            Vector2 collisionPoint = null;
+
+            Vector2 sideMiddle = tile.getCenter(tileCenter).add(-tile.width / 2, 0);
+            float nearestSideDst = startCenter.dst2(sideMiddle);
+            collisionPoint = new Vector2(sideMiddle);
+
+            sideMiddle = tile.getCenter(tileCenter).add(tile.width / 2, 0);
+            float sideDst = startCenter.dst2(sideMiddle);
+            if (sideDst < nearestSideDst) {
+                nearestSideDst = sideDst;
+                collision = 1;
+                collisionPoint = new Vector2(sideMiddle);
+            }
+
+            sideMiddle = tile.getCenter(tileCenter).add(0, -tile.height / 2);
+            sideDst = startCenter.dst2(sideMiddle);
+            if (sideDst < nearestSideDst) {
+                nearestSideDst = sideDst;
+                collision = 2;
+                collisionPoint = new Vector2(sideMiddle);
+            }
+
+            sideMiddle = tile.getCenter(tileCenter).add(0, tile.height / 2);
+            sideDst = startCenter.dst2(sideMiddle);
+            if (sideDst < nearestSideDst) {
+                collision = 3;
+                collisionPoint = new Vector2(sideMiddle);
+            }
+
+            if (collision == 0) {
+                mario.velocity.x = 0;
+                mario.position.x = collisionPoint.x - mario.width;
+            } else if (collision == 1) {
+                mario.velocity.x = 0;
+                mario.position.x = collisionPoint.x;
+            } else if (collision == 2) {
+                mario.velocity.y = 0;
+                mario.position.y = collisionPoint.y - mario.height;
+            } else if (collision == 3) {
+                mario.velocity.y = 0;
+                mario.position.y = collisionPoint.y;
+                mario.grounded = true;
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -29,7 +28,7 @@ public class Mario {
     }
 
     final Vector2 maxVelocity = new Vector2(10,19);
-    final Vector2 position = new Vector2(0f,0f);
+    final Vector2 position = new Vector2(0,1);
     final Vector2 velocity = new Vector2(0,0);
 
     State state = State.Idle;
@@ -57,7 +56,7 @@ public class Mario {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        if(direction == Direction.Left) {
+        if (direction == Direction.Left) {
             batch.draw(textureRegion, position.x + width, position.y, -width, height);
         } else {
             batch.draw(textureRegion, position.x, position.y, width, height);
@@ -79,5 +78,4 @@ public class Mario {
             stateAnimation = Assets.marioDead;
         }
     }
-
 }

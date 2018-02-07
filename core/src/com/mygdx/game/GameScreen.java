@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends MyGdxGameScreen {
     public static float PPM = 1/16f;
-    public static int SCENE_WIDTH = 32;
-    public static int SCENE_HEIGHT = 16;
+    public static int SCENE_WIDTH = 16;
+    public static int SCENE_HEIGHT = 8;
 
     World world;
 
@@ -44,11 +44,6 @@ public class GameScreen extends MyGdxGameScreen {
 
     @Override
     public void render(float delta) {
-        timer += delta;
-
-        if(timer < 0.5f) return;
-        timer = 0;
-
         Gdx.gl.glClearColor(0.23f,0.73f,0.98f,0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
