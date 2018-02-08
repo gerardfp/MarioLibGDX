@@ -16,4 +16,8 @@ public class Assets {
     static Animation<TextureRegion> marioIdle = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/idle"));
     static Animation<TextureRegion> marioDamp = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/damp"));
     static Animation<TextureRegion> marioDead = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/dead"));
+    static Animation<TextureRegion> goombaWalk = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("goomba/walk"));
+    static Animation<TextureRegion> goombaDead = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("goomba/dead"));
+    static Animation<TextureRegion> coin = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("coin/coin"));
+
 }

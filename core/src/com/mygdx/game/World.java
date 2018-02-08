@@ -18,6 +18,8 @@ public class World {
 
     Map map;
     Mario mario;
+    Array<Coin> coins = new Array<Coin>();
+    Array<Goomba> goombas = new Array<Goomba>();
 
 
     private Pool<Rectangle> rectPool;

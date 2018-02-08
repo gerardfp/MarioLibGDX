@@ -1,8 +1,11 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -10,27 +13,51 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
+import java.util.Iterator;
+
 /**
  * Created by gerard on 05/02/2018.
  */
 
 public class Map {
     OrthographicCamera camera;
+    TiledMap map;
     MapRenderer mapRenderer;
     TiledMapTileLayer layerGround;
+    SpriteBatch batch = new SpriteBatch();
+    Array<MyMapObject> mapObjects = new Array<MyMapObject>();
 
     Map(OrthographicCamera camera) {
         this.camera = camera;
 
-        TiledMap map = new TmxMapLoader().load("maps/level1.tmx");
-
-        mapRenderer = new OrthogonalTiledMapRenderer(map,GameScreen.PPM);
+        map = new TmxMapLoader().load("maps/level1.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map, GameScreen.PPM);
         layerGround = (TiledMapTileLayer) map.getLayers().get("ground");
+        loadObjects();
+
+    }
+
+    void loadObjects(){
+//        for(MapObject mapObject: map.getLayers().get("objects").getObjects()) {
+//            String type = mapObject.getProperties().get("type").toString();
+//            if("coin".equals(type)){
+//                mapObjects.add(new Coin());
+//            } else if("goomba".equals(type)){
+//                mapObjects.add(new Goomba());
+//            }
+//        }
     }
 
     void render() {
         mapRenderer.setView(camera);
         mapRenderer.render();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        for(MyMapObject mapObject: mapObjects) {
+            mapObject.render(batch);
+        }
+        batch.end();
+
     }
 
     void getTiles(Rectangle position, Array<Rectangle> tiles, Pool<Rectangle> rectPool) {

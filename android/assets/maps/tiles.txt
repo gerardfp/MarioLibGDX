@@ -1,7 +1,7 @@
 tiles.png
-size: 64, 32
+size: 96, 32
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 box
   rotate: false
@@ -24,9 +24,30 @@ brick
   orig: 16, 16
   offset: 0, 0
   index: -1
-ground
+coin
   rotate: false
   xy: 48, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+goomba
+  rotate: false
+  xy: 64, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+ground
+  rotate: false
+  xy: 64, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+mario
+  rotate: false
+  xy: 80, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

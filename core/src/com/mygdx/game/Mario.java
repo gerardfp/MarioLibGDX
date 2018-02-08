@@ -6,10 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-/**
- * Created by gerard on 01/02/18.
- */
-
 public class Mario {
     static float DAMPING = 0.67f;
 
