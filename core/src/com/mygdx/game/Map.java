@@ -1,34 +1,30 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-
-import java.util.Iterator;
-
-/**
- * Created by gerard on 05/02/2018.
- */
+import com.mygdx.game.characters.Coin;
+import com.mygdx.game.characters.Goomba;
+import com.mygdx.game.characters.Mario;
+import com.mygdx.game.screens.GameScreen;
 
 public class Map {
-    OrthographicCamera camera;
+    World world;
     TiledMap map;
     MapRenderer mapRenderer;
     TiledMapTileLayer layerGround;
-    SpriteBatch batch = new SpriteBatch();
-    Array<MyMapObject> mapObjects = new Array<MyMapObject>();
 
-    Map(OrthographicCamera camera) {
-        this.camera = camera;
+
+    Map(World world) {
+        this.world = world;
 
         map = new TmxMapLoader().load("maps/level1.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, GameScreen.PPM);
@@ -38,26 +34,28 @@ public class Map {
     }
 
     void loadObjects(){
-//        for(MapObject mapObject: map.getLayers().get("objects").getObjects()) {
-//            String type = mapObject.getProperties().get("type").toString();
-//            if("coin".equals(type)){
-//                mapObjects.add(new Coin());
-//            } else if("goomba".equals(type)){
-//                mapObjects.add(new Goomba());
-//            }
-//        }
+        for(MapObject mapObject: map.getLayers().get("mario").getObjects()) {
+            world.mario = new Mario(world, getObjectPosition(mapObject));
+        }
+
+        for(MapObject mapObject: map.getLayers().get("goombas").getObjects()) {
+            world.gameCharacters.add(new Goomba(world, getObjectPosition(mapObject)));
+        }
+
+        for(MapObject mapObject: map.getLayers().get("coins").getObjects()) {
+            world.gameCharacters.add(new Coin(world, getObjectPosition(mapObject)));
+        }
+    }
+
+    Vector2 getObjectPosition(MapObject mapObject) {
+        float x = ((TiledMapTileMapObject) mapObject).getX()*GameScreen.PPM;
+        float y = ((TiledMapTileMapObject) mapObject).getY()*GameScreen.PPM;
+        return new Vector2(x, y);
     }
 
     void render() {
-        mapRenderer.setView(camera);
+        mapRenderer.setView(world.camera);
         mapRenderer.render();
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        for(MyMapObject mapObject: mapObjects) {
-            mapObject.render(batch);
-        }
-        batch.end();
-
     }
 
     void getTiles(Rectangle position, Array<Rectangle> tiles, Pool<Rectangle> rectPool) {
@@ -74,31 +72,6 @@ public class Map {
             }
         }
     }
-
-//    Rectangle getTile(Vector2 start, Vector2 end){
-//        float a = end.y - start.y;
-//        float b = end.x - start.x;
-//
-//        int signx = (int) b/ (int)Math.abs(b);
-//        int signy = (int) a/ (int)Math.abs(a);
-//
-//        for (int x = (int)start.x; x*signx<=(int)end.x*signx; x+=signx) {
-//            int y = (int) (a/b*(x-start.x)+start.y);
-//            TiledMapTileLayer.Cell cell = layerGround.getCell(x, y);
-//            if (cell != null) {
-//                return new Rectangle(x, y, 1, 1);
-//            }
-//        }
-//
-//        for(int y = (int)start.y; y*signy<=(int)end.y*signy; y+=signy) {
-//            int x = (int) (b/a*(y-start.y)+start.x);
-//            TiledMapTileLayer.Cell cell = layerGround.getCell(x, y);
-//            if (cell != null) {
-//                return new Rectangle(x, y, 1, 1);
-//            }
-//        }
-//        return null;
-//    }
 
     int getWidth() {
         return layerGround.getWidth();

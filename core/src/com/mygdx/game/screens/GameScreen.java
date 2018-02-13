@@ -1,12 +1,12 @@
-package com.mygdx.game;
+package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.World;
 
 /**
  * Created by gerard on 01/02/18.
@@ -23,7 +23,7 @@ public class GameScreen extends MyGdxGameScreen {
     OrthographicCamera camera;
     float timer;
 
-    GameScreen(Game game){
+    public GameScreen(Game game){
         super(game);
     }
 

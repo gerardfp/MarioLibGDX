@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2018.01.23" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="16" tileheight="16" infinite="0" nextobjectid="40">
+<map version="1.0" tiledversion="2018.01.23" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="16" tileheight="16" infinite="0" nextobjectid="45">
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer name="ground" width="60" height="30">
   <data encoding="csv">
@@ -46,7 +46,9 @@
   <object id="25" gid="10" x="256" y="432" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="goombas">
-  <object id="26" gid="5" x="224" y="464" width="16" height="16"/>
+  <object id="26" gid="5" x="64" y="464" width="16" height="16"/>
+  <object id="43" gid="5" x="240" y="464" width="16" height="16"/>
+  <object id="44" gid="5" x="96" y="416" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="mario">
   <object id="27" gid="6" x="16" y="464" width="16" height="16"/>

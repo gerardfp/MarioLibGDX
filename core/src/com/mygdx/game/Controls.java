@@ -8,15 +8,15 @@ import com.badlogic.gdx.Input;
  */
 
 public class Controls {
-    static boolean isLeftPressed() {
+    public static boolean isLeftPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A);
     }
 
-    static boolean isRightPressed() {
+    public static boolean isRightPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
     }
 
-    static boolean isJumpPressed() {
+    public static boolean isJumpPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W);
     }
 }

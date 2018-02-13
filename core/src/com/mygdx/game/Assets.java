@@ -4,20 +4,16 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * Created by gerard on 02/02/18.
- */
-
 public class Assets {
-    static TextureAtlas textureAtlas = new TextureAtlas("sprites/assets.txt");
+    public static TextureAtlas textureAtlas = new TextureAtlas("sprites/assets.txt");
 
-    static Animation<TextureRegion> marioWalk = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/walk"));
-    static Animation<TextureRegion> marioJump = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/jump"));
-    static Animation<TextureRegion> marioIdle = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/idle"));
-    static Animation<TextureRegion> marioDamp = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/damp"));
-    static Animation<TextureRegion> marioDead = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/dead"));
-    static Animation<TextureRegion> goombaWalk = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("goomba/walk"));
-    static Animation<TextureRegion> goombaDead = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("goomba/dead"));
-    static Animation<TextureRegion> coin = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("coin/coin"));
+    public static Animation<TextureRegion> marioWalk = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/walk"));
+    public static Animation<TextureRegion> marioJump = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/jump"));
+    public static Animation<TextureRegion> marioIdle = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/idle"));
+    public static Animation<TextureRegion> marioDamp = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/damp"));
+    public static Animation<TextureRegion> marioDead = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("mario/dead"));
+    public static Animation<TextureRegion> goombaWalk = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("goomba/walk"));
+    public static Animation<TextureRegion> goombaDead = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("goomba/dead"));
+    public static Animation<TextureRegion> coin = new Animation<TextureRegion>(0.1f, textureAtlas.findRegions("coin/coin"));
 
 }
